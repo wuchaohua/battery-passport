@@ -1,0 +1,40 @@
+ server:
+   port: 8084
+ spring:
+   application:
+     name: battery-service
+   cloud:
+     nacos:
+       discovery:
+         server-addr: ${NACOS_ADDR:127.0.0.1:8848}
+   datasource:
+     url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:3306}/battery_passport?useUnicode=true&characterEncoding=UTF-8
+     username: ${DB_USER:root}
+     password: ${DB_PASSWORD:root}
+     driver-class-name: com.mysql.cj.jdbc.Driver
+ 
+ battery:
+   plugin:
+     scan-path: ${PLUGIN_PATH:/opt/battery/plugins/}
+   deploy:
+     mode: ${DEPLOY_MODE:onpremise}
+ 
+ ---
+ spring:
+   config:
+     activate:
+       on-profile: saas
+ battery:
+   deploy:
+     mode: saas
+ 
+ ---
+ spring:
+   config:
+     activate:
+       on-profile: onpremise
+ battery:
+   deploy:
+     mode: onpremise
+   sso:
+     provider: ${SSO_PROVIDER:trina}

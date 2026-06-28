@@ -1,0 +1,17 @@
+ server:
+   port: 8083
+ spring:
+   application:
+     name: tenant-service
+   cloud:
+     nacos:
+       discovery:
+         server-addr: ${NACOS_ADDR:127.0.0.1:8848}
+   datasource:
+     url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:3306}/battery_passport?useUnicode=true&characterEncoding=UTF-8
+     username: ${DB_USER:root}
+     password: ${DB_PASSWORD:root}
+ 
+ battery:
+   deploy:
+     mode: ${DEPLOY_MODE:saas}

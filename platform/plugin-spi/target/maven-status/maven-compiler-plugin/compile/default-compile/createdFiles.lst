@@ -1,0 +1,10 @@
+com\battery\plugin\api\dto\ReportContext.class
+com\battery\plugin\api\dto\ValidateResult.class
+com\battery\plugin\api\dto\NotificationContext.class
+com\battery\plugin\api\event\BatteryEvent.class
+com\battery\plugin\api\dto\BatteryData.class
+com\battery\plugin\api\NotificationInterceptor.class
+com\battery\plugin\api\ReportCustomizer.class
+com\battery\plugin\api\BatteryDataTransformer.class
+com\battery\plugin\api\BatteryDataValidator.class
+com\battery\plugin\api\event\EventSubscriber.class

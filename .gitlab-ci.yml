@@ -1,0 +1,92 @@
+ stages:
+   - build
+   - test
+   - quality
+   - package
+   - obfuscate
+   - image
+   - deploy
+
+ variables:
+   DOCKER_REGISTRY: registry.battery.com
+   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2"
+
+ cache:
+   key: ${CI_COMMIT_REF_SLUG}
+   paths:
+     - .m2/
+     - frontend/node_modules/
+
+ services-build:
+   stage: build
+   script:
+     - mvn clean install -pl platform/common-core,platform/common-security,platform/common-mybatis -DskipTests
+     - |
+       for service in gateway-service auth-service battery-service tenant-service integration-service; do
+         mvn clean package -pl services/$service -DskipTests &
+       done
+     - wait
+   artifacts:
+     paths:
+       - services/*/target/*.jar
+
+ frontend-build:
+   stage: build
+   script:
+     - cd frontend
+     - npm ci
+     - npx turbo run build
+   artifacts:
+     paths:
+       - frontend/packages/*/dist/
+
+ services-test:
+   stage: test
+   script:
+     - mvn test -pl services/battery-service,services/auth-service,services/tenant-service
+     - mvn jacoco:report -pl services/battery-service
+   artifacts:
+     reports:
+       junit: services/*/target/surefire-reports/TEST-*.xml
+
+ sonarqube:
+   stage: quality
+   script:
+     - mvn sonar:sonar -Dsonar.projectKey=battery-passport
+   only:
+     - main
+     - develop
+     - /^release\/.*$/
+
+ obfuscate:
+   stage: obfuscate
+   only:
+     - /^release\/.*$/
+     - /^customer\/.*$/
+   script:
+     - |
+       for service in battery-service auth-service; do
+         java -jar candyguard.jar -in services/$service/target/$service.jar -out services/$service/target/$service-obfuscated.jar
+       done
+
+ docker-build:
+   stage: image
+   only:
+     - /^release\/.*$/
+     - /^customer\/.*$/
+     - main
+   script:
+     - |
+       for service in gateway-service auth-service battery-service tenant-service integration-service; do
+         docker build -t ${DOCKER_REGISTRY}/battery/${service}:${CI_COMMIT_TAG:-latest} services/$service/
+         docker push ${DOCKER_REGISTRY}/battery/${service}:${CI_COMMIT_TAG:-latest}
+       done
+
+ deploy:
+   stage: deploy
+   only:
+     - /^release\/.*$/
+     - /^customer\/.*$/
+   when: manual
+   script:
+     - helm upgrade --install battery-passport ./helm-charts -f helm-charts/values/values-${CI_COMMIT_REF_NAME#customer/}.yaml --set image.tag=${CI_COMMIT_TAG}

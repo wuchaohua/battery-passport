@@ -1,0 +1,16 @@
+ {
+   "name": "battery-passport",
+   "private": true,
+   "scripts": {
+     "dev": "turbo run dev",
+     "build": "turbo run build",
+     "build:saas": "turbo run build --filter=@battery/app-battery -- --mode saas",
+     "build:trina": "turbo run build --filter=@battery/app-battery -- --mode trina",
+     "build:tuobang": "turbo run build --filter=@battery/app-battery -- --mode tuobang",
+     "build:admin": "turbo run build --filter=@battery/app-admin",
+     "lint": "turbo run lint"
+   },
+   "devDependencies": {
+     "turbo": "^2.0.0"
+   }
+ }

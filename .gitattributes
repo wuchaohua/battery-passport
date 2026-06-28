@@ -1,0 +1,29 @@
+﻿# Auto detect text files and perform LF normalization
+* text=auto
+
+# Java source
+*.java text diff=java eol=lf
+*.xml text eol=lf
+*.yml text eol=lf
+*.properties text eol=lf
+
+# Frontend
+*.tsx text eol=lf
+*.ts text eol=lf
+*.jsx text eol=lf
+*.json text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+
+# Scripts
+*.sh text eol=lf
+*.bat text eol=crlf
+*.sql text eol=lf
+Dockerfile text eol=lf
+Jenkinsfile text eol=lf
+
+# Binary
+*.class binary
+*.jar binary
+*.png binary
+*.ico binary

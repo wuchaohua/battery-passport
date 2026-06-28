@@ -1,0 +1,35 @@
+ # Java
+ **/target/
+ **/build/
+ *.class
+ *.jar
+ *.war
+
+ # Node
+ node_modules/
+ dist/
+ .turbo/
+
+ # IDE
+ .idea/
+ *.iml
+ .vscode/
+ *.swp
+
+ # Env
+ .env.local
+ .env.*.local
+ application-local.yml
+
+ # OS
+ .DS_Store
+ Thumbs.db
+
+ # ProGuard
+ proguard/
+ *-obfuscated.jar
+
+ # Delivery
+ build/delivery/
+ *.zip
+ *.tar.gz

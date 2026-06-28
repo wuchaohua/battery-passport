@@ -1,0 +1,38 @@
+ server:
+   port: 8081
+ spring:
+   application:
+     name: auth-service
+   cloud:
+     nacos:
+       discovery:
+         server-addr: ${NACOS_ADDR:127.0.0.1:8848}
+ 
+ battery:
+   jwt:
+     secret: ${JWT_SECRET:BatteryPassportJwtSecretKeyForDev2026}
+     expiration-ms: 86400000
+ 
+ ---
+ spring:
+   config:
+     activate:
+       on-profile: saas
+ 
+ battery:
+   deploy:
+     mode: saas
+   sso:
+     provider: saas-builtin
+ 
+ ---
+ spring:
+   config:
+     activate:
+       on-profile: onpremise
+ 
+ battery:
+   deploy:
+     mode: onpremise
+   sso:
+     provider: ${SSO_PROVIDER:trina}

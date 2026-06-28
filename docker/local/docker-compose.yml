@@ -1,0 +1,78 @@
+ version: "3.8"
+ services:
+   nacos:
+     image: nacos/nacos-server:v2.2.3
+     ports: ["8848:8848"]
+     environment:
+       MODE: standalone
+
+   mysql:
+     image: mysql:8.0
+     ports: ["3306:3306"]
+     environment:
+       MYSQL_ROOT_PASSWORD: root
+       MYSQL_DATABASE: battery_passport
+     volumes:
+       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+   redis:
+     image: redis:7
+     ports: ["6379:6379"]
+
+   rocketmq-namesrv:
+     image: apache/rocketmq:5.1.4
+     command: sh mqnamesrv
+     ports: ["9876:9876"]
+
+   rocketmq-broker:
+     image: apache/rocketmq:5.1.4
+     command: sh mqbroker -n localhost:9876
+     depends_on: [rocketmq-namesrv]
+     ports: ["10909:10909", "10911:10911"]
+
+   # ===== 微服务 =====
+   gateway-service:
+     build: ../../services/gateway-service
+     ports: ["8080:8080"]
+     environment:
+       NACOS_ADDR: nacos:8848
+       DEPLOY_MODE: dev
+     depends_on: [nacos]
+
+   auth-service:
+     build: ../../services/auth-service
+     ports: ["8081:8081"]
+     environment:
+       NACOS_ADDR: nacos:8848
+       DEPLOY_MODE: dev
+       DB_HOST: mysql
+       DB_PASSWORD: root
+     depends_on: [nacos, mysql]
+
+   battery-service:
+     build: ../../services/battery-service
+     ports: ["8084:8084"]
+     environment:
+       NACOS_ADDR: nacos:8848
+       DB_HOST: mysql
+       DB_PASSWORD: root
+       PLUGIN_PATH: /opt/battery/plugins/
+     volumes:
+       - ./plugins:/opt/battery/plugins/
+     depends_on: [nacos, mysql]
+
+   tenant-service:
+     build: ../../services/tenant-service
+     ports: ["8083:8083"]
+     environment:
+       NACOS_ADDR: nacos:8848
+       DB_HOST: mysql
+       DB_PASSWORD: root
+     depends_on: [nacos, mysql]
+
+   integration-service:
+     build: ../../services/integration-service
+     ports: ["8089:8089"]
+     environment:
+       NACOS_ADDR: nacos:8848
+     depends_on: [nacos]

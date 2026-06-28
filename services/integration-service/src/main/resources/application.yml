@@ -1,0 +1,12 @@
+ server:
+   port: 8089
+ spring:
+   application:
+     name: integration-service
+   cloud:
+     nacos:
+       discovery:
+         server-addr: ${NACOS_ADDR:127.0.0.1:8848}
+ battery:
+   deploy:
+     mode: ${DEPLOY_MODE:onpremise}
