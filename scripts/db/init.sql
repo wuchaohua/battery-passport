@@ -1,4 +1,4 @@
-﻿CREATE DATABASE IF NOT EXISTS battery_passport DEFAULT CHARSET utf8mb4;
+CREATE DATABASE IF NOT EXISTS battery_passport DEFAULT CHARSET utf8mb4;
 
 USE battery_passport;
 

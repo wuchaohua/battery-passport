@@ -1,4 +1,4 @@
-﻿@echo off
+@echo off
 REM ========================================
 REM 电池护照平台 — Windows 构建脚本
 REM 使用: build.bat [profile]

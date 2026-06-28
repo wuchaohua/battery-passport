@@ -1,4 +1,4 @@
-﻿ # Battery Passport Platform
+ # Battery Passport Platform
 
  > 鐢垫睜鎶ょ収骞冲彴 鈥?闈㈠悜鍌ㄨ兘琛屼笟鐨勭數姹犲叏鐢熷懡鍛ㄦ湡绠＄悊骞冲彴
  >
