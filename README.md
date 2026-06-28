@@ -1,176 +1,152 @@
- # Battery Passport Platform
+﻿ # Battery Passport Platform
 
- > 电池护照平台 — 面向储能行业的电池全生命周期管理平台
+ > 鐢垫睜鎶ょ収骞冲彴 鈥?闈㈠悜鍌ㄨ兘琛屼笟鐨勭數姹犲叏鐢熷懡鍛ㄦ湡绠＄悊骞冲彴
  >
- > 技术栈: Spring Cloud Alibaba 2022.x + JDK 17 + React 18
+ > 鎶€鏈爤: Spring Cloud Alibaba 2022.x + JDK 17 + React 18
  >
- > 交付模式: 私有化部署（天合储能、托邦股份）+ SaaS 多租户
-
+ > 浜や粯妯″紡: 绉佹湁鍖栭儴缃诧紙澶╁悎鍌ㄨ兘銆佹墭閭﹁偂浠斤級+ SaaS 澶氱鎴?
  ---
 
- ## 概览
+ ## 姒傝
 
- Battery Passport Platform 是一套基于微服务架构的电池护照管理系统，覆盖电池从生产、流通、使用到回收的全生命周期数据管理，满足欧盟电池法规（EU 2023/1542）合规要求。
+ Battery Passport Platform 鏄竴濂楀熀浜庡井鏈嶅姟鏋舵瀯鐨勭數姹犳姢鐓х鐞嗙郴缁燂紝瑕嗙洊鐢垫睜浠庣敓浜с€佹祦閫氥€佷娇鐢ㄥ埌鍥炴敹鐨勫叏鐢熷懡鍛ㄦ湡鏁版嵁绠＄悊锛屾弧瓒虫鐩熺數姹犳硶瑙勶紙EU 2023/1542锛夊悎瑙勮姹傘€?
+ 鍚屼竴濂椾唬鐮佹敮鎸佷笁绉嶄氦浠樻ā寮忥細
 
- 同一套代码支持三种交付模式：
-
- | 模式 | 说明 | 客户案例 |
+ | 妯″紡 | 璇存槑 | 瀹㈡埛妗堜緥 |
  |------|------|---------|
- | 私有化部署 | 混淆 jar + Docker 镜像交付，不提供 Java 源码 | 天合储能、托邦股份 |
- | SaaS 多租户 | 云原生部署，租户隔离 | 中小型企业客户 |
- | 源码交付 | 含 SPI 扩展接口源码，支持客户二次开发 | 特定大客户 |
+ | 绉佹湁鍖栭儴缃?| 娣锋穯 jar + Docker 闀滃儚浜や粯锛屼笉鎻愪緵 Java 婧愮爜 | 澶╁悎鍌ㄨ兘銆佹墭閭﹁偂浠?|
+ | SaaS 澶氱鎴?| 浜戝師鐢熼儴缃诧紝绉熸埛闅旂 | 涓皬鍨嬩紒涓氬鎴?|
+ | 婧愮爜浜や粯 | 鍚?SPI 鎵╁睍鎺ュ彛婧愮爜锛屾敮鎸佸鎴蜂簩娆″紑鍙?| 鐗瑰畾澶у鎴?|
 
- ## 架构总览
+ ## 鏋舵瀯鎬昏
 
- 客户端 → Gateway → Auth / Battery / Tenant / Integration → Nacos / MySQL / Redis / RocketMQ
+ 瀹㈡埛绔?鈫?Gateway 鈫?Auth / Battery / Tenant / Integration 鈫?Nacos / MySQL / Redis / RocketMQ
 
- ## 微服务清单
-
- | 服务 | 端口 | 职责 | SaaS | 私有化 |
+ ## 寰湇鍔℃竻鍗?
+ | 鏈嶅姟 | 绔彛 | 鑱岃矗 | SaaS | 绉佹湁鍖?|
  |------|------|------|------|-------|
- | gateway-service | 8080 | 统一网关、路由、限流 | ✅ | ✅ |
- | auth-service | 8081 | OAuth2 授权、SSO 适配器 | ✅ | ✅ |
- | battery-service | 8084 | 电池护照 CRUD、生命周期管理 | ✅ | ✅ |
- | tenant-service | 8083 | 租户管理、套餐、隔离（仅 SaaS） | ✅ | ❌ |
- | integration-service | 8089 | ERP 对接、SSO 配置管理 | ✅ | ✅ |
+ | gateway-service | 8080 | 缁熶竴缃戝叧銆佽矾鐢便€侀檺娴?| 鉁?| 鉁?|
+ | auth-service | 8081 | OAuth2 鎺堟潈銆丼SO 閫傞厤鍣?| 鉁?| 鉁?|
+ | battery-service | 8084 | 鐢垫睜鎶ょ収 CRUD銆佺敓鍛藉懆鏈熺鐞?| 鉁?| 鉁?|
+ | tenant-service | 8083 | 绉熸埛绠＄悊銆佸椁愩€侀殧绂伙紙浠?SaaS锛?| 鉁?| 鉂?|
+ | integration-service | 8089 | ERP 瀵规帴銆丼SO 閰嶇疆绠＄悊 | 鉁?| 鉁?|
 
- ## 技术栈
+ ## 鎶€鏈爤
 
- | 领域 | 选型 |
+ | 棰嗗煙 | 閫夊瀷 |
  |------|------|
- | 语言 | JDK 17 (LTS) |
- | 微服务框架 | Spring Boot 3.1 + Spring Cloud Alibaba 2022 |
- | 注册/配置 | Nacos |
- | 网关 | Spring Cloud Gateway + Sentinel |
+ | 璇█ | JDK 17 (LTS) |
+ | 寰湇鍔℃鏋?| Spring Boot 3.1 + Spring Cloud Alibaba 2022 |
+ | 娉ㄥ唽/閰嶇疆 | Nacos |
+ | 缃戝叧 | Spring Cloud Gateway + Sentinel |
  | ORM | MyBatis-Plus 3.5 |
- | 数据库 | MySQL 8.0 |
- | 缓存 | Redis 7 |
- | 消息 | RocketMQ 5.x |
- | 安全 | Spring Security + JWT + 企业 SSO 适配 |
- | 前端 | React 18 + TypeScript + Vite 5 + Turborepo + Ant Design Pro 5 |
+ | 鏁版嵁搴?| MySQL 8.0 |
+ | 缂撳瓨 | Redis 7 |
+ | 娑堟伅 | RocketMQ 5.x |
+ | 瀹夊叏 | Spring Security + JWT + 浼佷笟 SSO 閫傞厤 |
+ | 鍓嶇 | React 18 + TypeScript + Vite 5 + Turborepo + Ant Design Pro 5 |
 
- ## 目录结构
+ ## 鐩綍缁撴瀯
 
  ```
  battery-passport/
- ├── pom.xml                        # 父 POM（依赖管理 + Profile 切换）
- ├── .gitlab-ci.yml                 # GitLab CI/CD 流水线
- ├── Jenkinsfile                    # Jenkins Pipeline（含混淆阶段）
- ├── platform/                      # 公共基础模块（6 个组件）
- │   ├── plugin-spi/                #   插件 SPI 接口（battery-plugin-api）
- │   ├── common-core/               #   核心 DTO、异常、上下文
- │   ├── common-security/           #   SSO 适配器、JWT、安全过滤
- │   └── common-mybatis/            #   多租户拦截器、基类实体
- ├── services/                      # 微服务实现（5 个）
- │   ├── gateway-service/           #   Spring Cloud Gateway
- │   ├── auth-service/              #   认证中心（SSO 适配器模式）
- │   ├── battery-service/           #   电池护照核心（含 SPI 热加载）
- │   ├── tenant-service/            #   SaaS 租户管理
- │   └── integration-service/       #   企业 ERP/SSO 集成
- ├── frontend/                      # React Turborepo Monorepo
- ├── docker/local/                  # Docker Compose 开发环境
- ├── scripts/db/                    # 数据库初始化脚本
- └── helm-charts/                   # Kubernetes 部署编排
+ 鈹溾攢鈹€ pom.xml                        # 鐖?POM锛堜緷璧栫鐞?+ Profile 鍒囨崲锛? 鈹溾攢鈹€ .gitlab-ci.yml                 # GitLab CI/CD 娴佹按绾? 鈹溾攢鈹€ Jenkinsfile                    # Jenkins Pipeline锛堝惈娣锋穯闃舵锛? 鈹溾攢鈹€ platform/                      # 鍏叡鍩虹妯″潡锛? 涓粍浠讹級
+ 鈹?  鈹溾攢鈹€ plugin-spi/                #   鎻掍欢 SPI 鎺ュ彛锛坆attery-plugin-api锛? 鈹?  鈹溾攢鈹€ common-core/               #   鏍稿績 DTO銆佸紓甯搞€佷笂涓嬫枃
+ 鈹?  鈹溾攢鈹€ common-security/           #   SSO 閫傞厤鍣ㄣ€丣WT銆佸畨鍏ㄨ繃婊? 鈹?  鈹斺攢鈹€ common-mybatis/            #   澶氱鎴锋嫤鎴櫒銆佸熀绫诲疄浣? 鈹溾攢鈹€ services/                      # 寰湇鍔″疄鐜帮紙5 涓級
+ 鈹?  鈹溾攢鈹€ gateway-service/           #   Spring Cloud Gateway
+ 鈹?  鈹溾攢鈹€ auth-service/              #   璁よ瘉涓績锛圫SO 閫傞厤鍣ㄦā寮忥級
+ 鈹?  鈹溾攢鈹€ battery-service/           #   鐢垫睜鎶ょ収鏍稿績锛堝惈 SPI 鐑姞杞斤級
+ 鈹?  鈹溾攢鈹€ tenant-service/            #   SaaS 绉熸埛绠＄悊
+ 鈹?  鈹斺攢鈹€ integration-service/       #   浼佷笟 ERP/SSO 闆嗘垚
+ 鈹溾攢鈹€ frontend/                      # React Turborepo Monorepo
+ 鈹溾攢鈹€ docker/local/                  # Docker Compose 寮€鍙戠幆澧? 鈹溾攢鈹€ scripts/db/                    # 鏁版嵁搴撳垵濮嬪寲鑴氭湰
+ 鈹斺攢鈹€ helm-charts/                   # Kubernetes 閮ㄧ讲缂栨帓
  ```
 
- ## 快速开始
-
- ### 环境要求
+ ## 蹇€熷紑濮?
+ ### 鐜瑕佹眰
  - JDK 17+
  - Maven 3.9+
- - Node.js 18+ (前端)
- - Docker & Docker Compose (本地环境)
+ - Node.js 18+ (鍓嶇)
+ - Docker & Docker Compose (鏈湴鐜)
 
- ### 本地开发
-
+ ### 鏈湴寮€鍙?
  ```bash
- # 1. 启动基础设施（Nacos + MySQL + Redis）
- docker compose -f docker/local/docker-compose.yml up -d nacos mysql redis
+ # 1. 鍚姩鍩虹璁炬柦锛圢acos + MySQL + Redis锛? docker compose -f docker/local/docker-compose.yml up -d nacos mysql redis
 
- # 2. 构建公共模块
+ # 2. 鏋勫缓鍏叡妯″潡
  mvn clean install -f platform/plugin-spi/pom.xml -DskipTests
  mvn clean install -f platform/common-core/pom.xml -DskipTests
  mvn clean install -f platform/common-security/pom.xml -DskipTests
  mvn clean install -f platform/common-mybatis/pom.xml -DskipTests
 
- # 3. 并行启动微服务
- mvn spring-boot:run -f services/gateway-service/pom.xml &
+ # 3. 骞惰鍚姩寰湇鍔? mvn spring-boot:run -f services/gateway-service/pom.xml &
  mvn spring-boot:run -f services/auth-service/pom.xml &
  mvn spring-boot:run -f services/battery-service/pom.xml &
  mvn spring-boot:run -f services/tenant-service/pom.xml &
 
- # 4. 启动前端
+ # 4. 鍚姩鍓嶇
  cd frontend && npm ci && npm run dev
  ```
 
- ### 生产构建
+ ### 鐢熶骇鏋勫缓
 
  ```bash
- # SaaS 生产
+ # SaaS 鐢熶骇
  bash build.sh saas-prod
 
- # 私有化交付（含混淆）
+ # 绉佹湁鍖栦氦浠橈紙鍚贩娣嗭級
  bash build.sh onpremise-prod
  ```
 
- ## 部署模式
+ ## 閮ㄧ讲妯″紡
 
- ### 私有化部署
-
- 交付物为混淆后的 jar 包 + Docker 镜像，不包含 Java 源码。客户方通过以下机制实现业务定制：
-
- | 定制方式 | 说明 | 示例 |
+ ### 绉佹湁鍖栭儴缃?
+ 浜や粯鐗╀负娣锋穯鍚庣殑 jar 鍖?+ Docker 闀滃儚锛屼笉鍖呭惈 Java 婧愮爜銆傚鎴锋柟閫氳繃浠ヤ笅鏈哄埗瀹炵幇涓氬姟瀹氬埗锛?
+ | 瀹氬埗鏂瑰紡 | 璇存槑 | 绀轰緥 |
  |---------|------|------|
- | SPI 插件 | 实现公开接口注册插件 jar | 天合容量校验、托邦 ERP 转换 |
- | REST API | 调用开放接口/Webhook | ERP 同步、报告导出 |
- | 脚本引擎 | Groovy 规则脚本热加载 | 校验规则、报告水印 |
- | 前端扩展 | 远程 React 组件注入 | 天合专属仪表盘 |
- | 配置化 | yaml 覆盖定制 | SSO 地址、品牌色、限流 |
+ | SPI 鎻掍欢 | 瀹炵幇鍏紑鎺ュ彛娉ㄥ唽鎻掍欢 jar | 澶╁悎瀹归噺鏍￠獙銆佹墭閭?ERP 杞崲 |
+ | REST API | 璋冪敤寮€鏀炬帴鍙?Webhook | ERP 鍚屾銆佹姤鍛婂鍑?|
+ | 鑴氭湰寮曟搸 | Groovy 瑙勫垯鑴氭湰鐑姞杞?| 鏍￠獙瑙勫垯銆佹姤鍛婃按鍗?|
+ | 鍓嶇鎵╁睍 | 杩滅▼ React 缁勪欢娉ㄥ叆 | 澶╁悎涓撳睘浠〃鐩?|
+ | 閰嶇疆鍖?| yaml 瑕嗙洊瀹氬埗 | SSO 鍦板潃銆佸搧鐗岃壊銆侀檺娴?|
 
- 详见 [battery-passport-extension](https://github.com/wuchaohua/battery-passport-extension) 二次开发示例工程。
+ 璇﹁ [battery-passport-extension](https://github.com/wuchaohua/battery-passport-extension) 浜屾寮€鍙戠ず渚嬪伐绋嬨€?
+ ### SaaS 澶氱鎴烽儴缃?
+ 澶氱鎴风壒鎬э細
+ - MyBatis-Plus tenant_id 鍒楃骇鏁版嵁闅旂
+ - Nginx 璇锋眰澶?X-Tenant-Id 璺敱鍒嗗彂
+ - Kubernetes HPA 鑷姩寮规€т几缂? - 绉熸埛绮掑害鐨勫椁愬拰閰嶉绠＄悊
 
- ### SaaS 多租户部署
+ ## 闃插弽缂栬瘧鎺柦
 
- 多租户特性：
- - MyBatis-Plus tenant_id 列级数据隔离
- - Nginx 请求头 X-Tenant-Id 路由分发
- - Kubernetes HPA 自动弹性伸缩
- - 租户粒度的套餐和配额管理
-
- ## 防反编译措施
-
- | 层级 | 技术 | 说明 |
+ | 灞傜骇 | 鎶€鏈?| 璇存槑 |
  |------|------|------|
- | 混淆层 | ProGuard / CandyGuard | 类名/方法名混淆 + 字符串加密 |
- | 配置层 | Jasypt | 配置文件密码/secret 加密 |
- | 部署层 | JDK 17 密封类 | 核心模块防止继承 |
- | 运行时 | Plugin ClassLoader | 插件沙箱隔离 |
+ | 娣锋穯灞?| ProGuard / CandyGuard | 绫诲悕/鏂规硶鍚嶆贩娣?+ 瀛楃涓插姞瀵?|
+ | 閰嶇疆灞?| Jasypt | 閰嶇疆鏂囦欢瀵嗙爜/secret 鍔犲瘑 |
+ | 閮ㄧ讲灞?| JDK 17 瀵嗗皝绫?| 鏍稿績妯″潡闃叉缁ф壙 |
+ | 杩愯鏃?| Plugin ClassLoader | 鎻掍欢娌欑闅旂 |
 
- ## 主要 API
+ ## 涓昏 API
 
- | 方法 | 端点 | 说明 |
+ | 鏂规硶 | 绔偣 | 璇存槑 |
  |------|------|------|
- | GET | /api/v1/passports | 护照列表（分页/筛选） |
- | POST | /api/v1/passports | 创建电池护照 |
- | GET | /api/v1/passports/{id} | 护照详情 |
- | PUT | /api/v1/passports/{id} | 更新护照 |
- | DELETE | /api/v1/passports/{id} | 删除护照 |
- | GET | /api/v1/passports/search | 序列号搜索 |
- | POST | /api/v1/auth/login | 获取登录 URL |
- | GET/POST | /api/v1/tenants | 租户管理（SaaS） |
- | POST | /api/v1/integration/erp/import | ERP 数据导入 |
+ | GET | /api/v1/passports | 鎶ょ収鍒楄〃锛堝垎椤?绛涢€夛級 |
+ | POST | /api/v1/passports | 鍒涘缓鐢垫睜鎶ょ収 |
+ | GET | /api/v1/passports/{id} | 鎶ょ収璇︽儏 |
+ | PUT | /api/v1/passports/{id} | 鏇存柊鎶ょ収 |
+ | DELETE | /api/v1/passports/{id} | 鍒犻櫎鎶ょ収 |
+ | GET | /api/v1/passports/search | 搴忓垪鍙锋悳绱?|
+ | POST | /api/v1/auth/login | 鑾峰彇鐧诲綍 URL |
+ | GET/POST | /api/v1/tenants | 绉熸埛绠＄悊锛圫aaS锛?|
+ | POST | /api/v1/integration/erp/import | ERP 鏁版嵁瀵煎叆 |
 
- ## 项目路线图
-
+ ## 椤圭洰璺嚎鍥?
  ```
- v1.0 --- 核心护照 CRUD + 天合储能私有化部署
- v1.1 --- 托邦股份部署 + SSO 适配器扩展
- v1.2 --- SaaS 多租户上线 + 运营控制台
- v2.0 --- 区块链溯源 + 政府监管上报
- v2.1 --- 欧盟电池法规合规
- v2.2 --- AI 寿命预测 + 梯次利用建议
+ v1.0 --- 鏍稿績鎶ょ収 CRUD + 澶╁悎鍌ㄨ兘绉佹湁鍖栭儴缃? v1.1 --- 鎵橀偊鑲′唤閮ㄧ讲 + SSO 閫傞厤鍣ㄦ墿灞? v1.2 --- SaaS 澶氱鎴蜂笂绾?+ 杩愯惀鎺у埗鍙? v2.0 --- 鍖哄潡閾炬函婧?+ 鏀垮簻鐩戠涓婃姤
+ v2.1 --- 娆х洘鐢垫睜娉曡鍚堣
+ v2.2 --- AI 瀵垮懡棰勬祴 + 姊鍒╃敤寤鸿
  ```
 
- ## 许可证
-
- Copyright (c) 2026 电池护照平台。保留所有权利。
+ ## 璁稿彲璇?
+ Copyright (c) 2026 鐢垫睜鎶ょ収骞冲彴銆備繚鐣欐墍鏈夋潈鍒┿€?
