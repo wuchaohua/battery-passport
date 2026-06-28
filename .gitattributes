@@ -1,28 +1,31 @@
-* text=auto eol=lf
-*.md text eol=lf working-tree-encoding=UTF-8
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Markdown
+*.md text eol=lf
 
 # Java
-*.java text diff=java eol=lf working-tree-encoding=UTF-8
-*.xml text eol=lf working-tree-encoding=UTF-8
-*.yml text eol=lf working-tree-encoding=UTF-8
-*.yaml text eol=lf working-tree-encoding=UTF-8
-*.properties text eol=lf working-tree-encoding=UTF-8
+*.java text diff=java eol=lf
+*.xml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.properties text eol=lf
 
 # Frontend
-*.tsx text eol=lf working-tree-encoding=UTF-8
-*.ts text eol=lf working-tree-encoding=UTF-8
-*.jsx text eol=lf working-tree-encoding=UTF-8
-*.json text eol=lf working-tree-encoding=UTF-8
-*.html text eol=lf working-tree-encoding=UTF-8
-*.css text eol=lf working-tree-encoding=UTF-8
+*.tsx text eol=lf
+*.ts text eol=lf
+*.jsx text eol=lf
+*.json text eol=lf
+*.html text eol=lf
+*.css text eol=lf
 
 # Scripts
-*.sh text eol=lf working-tree-encoding=UTF-8
-*.bat text eol=crlf working-tree-encoding=UTF-8
-*.sql text eol=lf working-tree-encoding=UTF-8
-*.groovy text eol=lf working-tree-encoding=UTF-8
-Dockerfile text eol=lf working-tree-encoding=UTF-8
-Jenkinsfile text eol=lf working-tree-encoding=UTF-8
+*.sh text eol=lf
+*.bat text eol=crlf
+*.sql text eol=lf
+*.groovy text eol=lf
+Dockerfile text eol=lf
+Jenkinsfile text eol=lf
 
 # Binary
 *.class binary
