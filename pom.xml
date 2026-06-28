@@ -88,7 +88,22 @@
                 <version>${jasypt.version}</version>
             </dependency>
         </dependencies>
-    </dependencyManagement>
+            </dependencyManagement>
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <properties><profiles.active>dev</profiles.active></properties>
+        </profile>
+        <profile>
+            <id>saas-prod</id>
+            <properties><profiles.active>saas-prod</profiles.active></properties>
+        </profile>
+        <profile>
+            <id>onpremise-prod</id>
+            <properties><profiles.active>onpremise-prod</profiles.active></properties>
+        </profile>
+    </profiles>
 
     <build>
         <pluginManagement>
@@ -111,5 +126,5 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+        </build>
 </project>
