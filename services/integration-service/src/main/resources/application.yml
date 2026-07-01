@@ -1,12 +1,30 @@
- server:
-   port: 8089
- spring:
-   application:
-     name: integration-service
-   cloud:
-     nacos:
-       discovery:
-         server-addr: ${NACOS_ADDR:127.0.0.1:8848}
- battery:
-   deploy:
-     mode: ${DEPLOY_MODE:onpremise}
+server:
+  port: 8089
+spring:
+  application:
+    name: integration-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_ADDR:127.0.0.1:8848}
+battery:
+  deploy:
+    mode: ${DEPLOY_MODE:onpremise}
+  dpp:
+    registry:
+      base-url: ${DPP_REGISTRY_BASE_URL:https://dpp-registry.ec.europa.eu/api/v1}
+      oidc-issuer-url: ${DPP_OIDC_ISSUER:https://dpp-registry.ec.europa.eu/auth/realms/dpp}
+      oidc-client-id: ${DPP_OIDC_CLIENT_ID:battery-passport-platform}
+      oidc-client-secret: ${DPP_OIDC_CLIENT_SECRET:}
+      trust-store-path: ${DPP_TRUST_STORE_PATH:}
+      trust-store-password: ${DPP_TRUST_STORE_PASSWORD:changeit}
+      key-store-dir: ${DPP_KEY_STORE_DIR:/etc/battery/dpp/keystores}
+      key-store-password: ${DPP_KEY_STORE_PASSWORD:changeit}
+      mtls-enabled: ${DPP_MTLS_ENABLED:true}
+      connect-timeout-ms: ${DPP_CONNECT_TIMEOUT:10000}
+      read-timeout-ms: ${DPP_READ_TIMEOUT:30000}
+      max-audit-entries-per-enterprise: ${DPP_MAX_AUDIT_ENTRIES:10000}
+
+logging:
+  level:
+    com.battery.integration.dpp: DEBUG
