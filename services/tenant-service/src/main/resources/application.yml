@@ -8,7 +8,7 @@
        discovery:
          server-addr: ${NACOS_ADDR:127.0.0.1:8848}
    datasource:
-     url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:3306}/battery_passport?useUnicode=true&characterEncoding=UTF-8
+     url: ${DB_URL:jdbc:mysql://127.0.0.1:3306/battery_passport}
      username: ${DB_USER:root}
      password: ${DB_PASSWORD:root}
  

@@ -30,7 +30,7 @@
      depends_on: [rocketmq-namesrv]
      ports: ["10909:10909", "10911:10911"]
 
-   # ===== 微服务 =====
+   # ===== 寰湇鍔?=====
    gateway-service:
      build: ../../services/gateway-service
      ports: ["8080:8080"]
@@ -45,7 +45,7 @@
      environment:
        NACOS_ADDR: nacos:8848
        DEPLOY_MODE: dev
-       DB_HOST: mysql
+       DB_HOST: mysql       # Change to 'postgresql' when using PostgreSQL
        DB_PASSWORD: root
      depends_on: [nacos, mysql]
 
@@ -54,7 +54,7 @@
      ports: ["8084:8084"]
      environment:
        NACOS_ADDR: nacos:8848
-       DB_HOST: mysql
+       DB_HOST: mysql       # Change to 'postgresql' when using PostgreSQL
        DB_PASSWORD: root
        PLUGIN_PATH: /opt/battery/plugins/
      volumes:
@@ -66,7 +66,7 @@
      ports: ["8083:8083"]
      environment:
        NACOS_ADDR: nacos:8848
-       DB_HOST: mysql
+       DB_HOST: mysql       # Change to 'postgresql' when using PostgreSQL
        DB_PASSWORD: root
      depends_on: [nacos, mysql]
 

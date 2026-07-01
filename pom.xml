@@ -87,6 +87,12 @@
                 <artifactId>jasypt-spring-boot-starter</artifactId>
                 <version>${jasypt.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>42.7.4</version>
+                <scope>runtime</scope>
+            </dependency>
         </dependencies>
             </dependencyManagement>
     <profiles>
